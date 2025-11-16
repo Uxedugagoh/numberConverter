@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class Main {
 
-
+    /*
     public static void main(String[] args) {
         System.out.println(sumProp(921_611_001_012L, "М", "П"));
         System.out.println(sumProp(9876543L, "М", "И"));
@@ -19,6 +19,7 @@ public class Main {
         System.out.println(sumProp(105, "Ж", "Т"));
         System.out.println(sumProp(14, "Ж", "Т"));
     }
+     */
 
     // Загрузка данных из JSON файла
     private static final NumeralForms forms = NumeralDataLoader.loadData();
@@ -26,17 +27,17 @@ public class Main {
     public static String sumProp(long nSum, String sGender, String sCase) {
         // Проверки на некорректный ввод данных
         if (!(Objects.equals(sGender, "Ж") || Objects.equals(sGender, "С") || Objects.equals(sGender, "М"))) {
-            return "Неверный формат пола.";
+            throw new IllegalArgumentException("Неверный формат пола.");
         }
         if (!(Objects.equals(sCase, "И") || Objects.equals(sCase, "Р") || Objects.equals(sCase, "Д") ||
                 Objects.equals(sCase, "В") || Objects.equals(sCase, "Т") || Objects.equals(sCase, "П"))) {
-            return "Неверный формат падежа.";
+            throw new IllegalArgumentException("Неверный формат падежа.");
+        }
+        if (nSum > 999_999_999_999L || nSum < -999_999_999_999L) {
+            throw new IllegalArgumentException("Данное число вне границ.");
         }
         if (nSum == 0) {
             return forms.getZerosForm(sCase);
-        }
-        if (nSum > 999_999_999_999L || nSum < -999_999_999_999L) {
-            return "Данное число вне границ.";
         }
 
         boolean neagtive = false;
@@ -74,6 +75,35 @@ public class Main {
 
     // Метод получения списка short переменных, состоящий из триплетов чисел внутри заданного числа.
     private static List<Short> getShorts(long nSum) {
+        // Преобразование числа в строку, и получения из неё массива символов.
+        String remaining = Long.toString(nSum);
+        // Отзеркаливаем полученное число, так как при отделении трёхзначных чисел нужно идти справа-налево.
+        remaining = new StringBuilder(remaining).reverse().toString();
+        char[] charArray = new char[remaining.length()];
+        remaining.getChars(0, remaining.length(), charArray, 0);
+        // Начинаем отделять трёх-значные числа, которые мы выделяем, проговаривая числительные вслух. (триплеты)
+        StringBuilder stringBuilder = new StringBuilder();
+        List<Short> tripletList = new ArrayList<>();
+        // Итератор лучше сделать 1, для того чтобы корректно вычислять i % 3
+        for (int i = 1; i <= charArray.length; i++) {
+            stringBuilder.append(charArray[i - 1]);
+            if (i % 3 == 0 || i == charArray.length) {
+                // Нужно отзеркалить полученное число, так как мы шли справа-налево
+                stringBuilder.reverse();
+                tripletList.add(Short.parseShort(stringBuilder.toString()));
+                stringBuilder.delete(0, stringBuilder.length());
+            }
+        }
+        // Также отзеркалим полученный список триплетов, если в нём больше чем 1 значение
+        if (tripletList.size() > 1) {
+            Collections.reverse(tripletList);
+        }
+        return tripletList;
+    }
+    /*
+    // Вариант метода getShorts, реализованный без приведения числа к строке, использующий логарифм от 1000
+    // для определения количества триплетов в полученном на вход числе.
+    private static List<Short> getShorts(long nSum) {
         long remaning = nSum;
         // log_1000(x) = log_e(x) / log_e(1000), log_e(x) == Math.log(x);
         // Таким образом можно узнать, сколько трёх-разрядных чисел в заданном числе.
@@ -89,6 +119,8 @@ public class Main {
         }
         return tripletList;
     }
+    */
+
 
     // Метод для конвертации числа-триплета в пропись
     public static String convertThree(short nSum, String sCase, String sGender) {
