@@ -4,7 +4,8 @@ import java.util.*;
 
 public class NumberConverter {
     // Загрузка данных из JSON файла
-    private final NumeralForms forms = NumeralDataLoader.loadData();
+    private final NumeralDataLoader dataLoader = new NumeralDataLoader();
+    private final NumeralForms forms = dataLoader.loadData();
 
     public String sumProp(long nSum, String sGender, String sCase) {
         // Проверки на некорректный ввод данных

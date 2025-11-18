@@ -5,12 +5,11 @@ import java.io.InputStream;
 
 public class NumeralDataLoader {
     // Путь до JSON файла
-    private static final String JSON_FILE_PATH = "/numeralForms.json";
+    private final String JSON_FILE_PATH = "/numeralForms.json";
 
-
-    public static NumeralForms loadData() {
+    public NumeralForms loadData() {
         // Класс для чтения JSON файла и преобразования его в объект из библиотеки Jackson
-        ObjectMapper mapper = new ObjectMapper(); // todo: В поле класса. Убрать static
+        ObjectMapper mapper = new ObjectMapper();
 
         try (InputStream inputStream = NumeralDataLoader.class.getResourceAsStream(JSON_FILE_PATH)) {
             if (inputStream == null) {
