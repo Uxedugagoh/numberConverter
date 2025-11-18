@@ -1,4 +1,4 @@
-import com.example.Main;
+import com.example.NumberConverter;
 import com.example.NumeralForms;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class TestsForNumberConverter {
+public class NumberConverterTest {
 
     private static Stream<Arguments> testData() {
         return Stream.of(
@@ -22,8 +22,9 @@ public class TestsForNumberConverter {
                 Arguments.of(1903, "М", "П", "одной тысяче девятистах трёх"),
                 Arguments.of(29467, "М", "И", "двадцать девять тысяч четыреста шестьдесят семь"),
                 Arguments.of(120, "М", "И", "сто двадцать"),
-                Arguments.of(100000, "Ж", "Д", "ста тысячам "),
-                Arguments.of(13000, "М", "И", "тринадцать тысяч "),
+                Arguments.of(100000000001L, "Ж", "Т", "ста миллиардами одной"),
+                Arguments.of(100000, "Ж", "Д", "ста тысячам"),
+                Arguments.of(13000, "М", "И", "тринадцать тысяч"),
                 Arguments.of(61_003_603_035L, "М", "И", "шестьдесят один миллиард три миллиона шестьсот три тысячи тридцать пять")
         );
     }private static Stream<Arguments> exceptionTestData() {
@@ -38,14 +39,16 @@ public class TestsForNumberConverter {
     @ParameterizedTest
     @MethodSource("testData")
     void testSumProp(long nSum, String sGender, String sCase, String expected) {
-        assertEquals(expected, Main.sumProp(nSum, sGender, sCase),
+        NumberConverter numberConverter = new NumberConverter();
+        assertEquals(expected, numberConverter.sumProp(nSum, sGender, sCase),
                 () -> String.format("На вход подавались значения: %d, %s, %s", nSum, sGender, sCase));
     }
 
     @ParameterizedTest
     @MethodSource("exceptionTestData")
     void testSumPropExceptions(long nSum, String sGender, String sCase, String expected) {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> Main.sumProp(nSum, sGender, sCase));
+        NumberConverter numberConverter = new NumberConverter();
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> numberConverter.sumProp(nSum, sGender, sCase));
         assertEquals(expected, exception.getMessage());
     }
 
