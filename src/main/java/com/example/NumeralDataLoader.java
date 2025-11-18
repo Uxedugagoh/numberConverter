@@ -10,7 +10,7 @@ public class NumeralDataLoader {
 
     public static NumeralForms loadData() {
         // Класс для чтения JSON файла и преобразования его в объект из библиотеки Jackson
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper(); // todo: В поле класса. Убрать static
 
         try (InputStream inputStream = NumeralDataLoader.class.getResourceAsStream(JSON_FILE_PATH)) {
             if (inputStream == null) {
