@@ -81,7 +81,7 @@ public class NumeralForms {
         byte singularFormGenetive = 1;
         byte pluralFormGenetive = 2;
         if (lastTwoDigits >= 11 && lastTwoDigits <= 19) {
-            form = 2;
+            form = pluralFormGenetive;
         } else {
             form = switch (lastDigit) {
                 case 1 -> singularForm;
