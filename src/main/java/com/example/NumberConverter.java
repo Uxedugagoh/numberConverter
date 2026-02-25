@@ -29,9 +29,6 @@ public class NumberConverter {
         }
         // Создание списка триплетов - трёхзначных чисел, которые мы выговариваем при произношении числа.
         List<Short> tripletList = getTriplets(nSum);
-        // Reverse нужен для того, чтобы идти по полученным триплетам Справа налево, позволяя вставлять слова
-        // "миллиард", "миллион", "тысяча" при необходимости.
-        Collections.reverse(tripletList);
 
         StringBuilder result = new StringBuilder();
         int size = tripletList.size();
@@ -57,7 +54,7 @@ public class NumberConverter {
     }
 
     /**
-     * Метод получения списка short переменных, состоящий из триплетов чисел внутри заданного числа.
+     * Метод получения списка short переменных, состоящий из триплетов чисел внутри заданного числа справа налево.
      * @param nSum - Заданное число
      * @return - Список List<Short>, содержащий трёхзначные числа, из которых состоит полученное на вход число
      */
@@ -67,7 +64,6 @@ public class NumberConverter {
             shorts.add((short) (nSum % 1000));
             nSum /= 1000;
         }
-        Collections.reverse(shorts);
         return shorts;
     }
 
